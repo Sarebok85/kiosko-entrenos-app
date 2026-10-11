@@ -52,6 +52,15 @@ code { font-size: .85em; background: var(--paper-2); padding: 0 .3em; border-rad
 .sesion .que { font-weight: 700; font-size: 20px; word-break: break-word; }
 .sesion .num { grid-column: 3; }
 .sesion.hecha .ico { color: var(--ok); font-weight: 800; }
+/* eventos de los calendarios: el color del calendario en el borde */
+.evento { display: grid; grid-template-columns: 58px 1fr; gap: 2px 8px; align-items: baseline;
+  border-left: 5px solid var(--c); padding-left: 10px; }
+.evento .que { font-weight: 700; font-size: 20px; }
+.evento .num { grid-column: 2; }
+.sesiones.mini li.evento { display: flex; border-left: 5px solid var(--c); background: var(--card); padding: 6px 8px; }
+.sesiones.mini .evento .que { font-size: 15px; }
+.sesiones.mini .evento .hora { font-size: 13px; font-weight: 700; color: var(--c); }
+.chip.ev { border: 0; border-left: 4px solid var(--c); border-radius: 4px; background: var(--paper); }
 .kpi .enorme { font-size: 84px; line-height: 1; }
 .kpi .ud { color: var(--mute); font-weight: 600; }
 .fila3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 14px 0; border-top: 1px solid var(--line); padding-top: 12px; }

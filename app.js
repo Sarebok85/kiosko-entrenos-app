@@ -10,6 +10,8 @@ const VUELTA_A_HOY_MS = 3 * 60e3;     // sin tocar la pantalla, vuelve al dashbo
 const RECARGA_MS = 15 * 60e3;         // relee data.json: el agente publica los domingos
 
 let DATA = null;
+let EVENTOS = [];     // eventos.json: calendarios de iCloud, lo genera el workflow cada 30'
+const COLORES_CAL = ['#2f6fdf', '#c2410c', '#7c3aed', '#0f766e', '#be185d'];
 let vista = 'hoy';
 const desfase = { semana: 0, mes: 0, nutricion: 0 };
 
@@ -27,6 +29,15 @@ const nDia = f => fecha(f).getUTCDate();
 const nombreDia = f => DIAS[fecha(f).getUTCDay()];
 const plan = f => (DATA.dias || {})[f];
 const hechas = f => (DATA.hechas || {})[f] || [];
+const calendarios = () => [...new Set(EVENTOS.map(e => e.cal))];
+const colorCal = c => COLORES_CAL[calendarios().indexOf(c) % COLORES_CAL.length];
+// los de todo el dia primero; un evento de varios dias sale en todos ellos
+const eventosDe = f => EVENTOS.filter(e => e.inicio.slice(0, 10) <= f && f <= e.fin.slice(0, 10))
+  .sort((a, b) => (b.todo_el_dia - a.todo_el_dia) || a.inicio.localeCompare(b.inicio));
+const horaEv = (e, f) => e.todo_el_dia ? 'día' : e.inicio.slice(0, 10) < f ? '↳' : e.inicio.slice(11, 16);
+const eventoHtml = (e, f) => `<li class="evento" style="--c:${colorCal(e.cal)}">
+  <span class="hora">${horaEv(e, f)}</span><span class="que">${esc(e.titulo)}</span>
+  ${e.lugar ? `<span class="num">${esc(e.lugar.split('\n')[0])}</span>` : ''}</li>`;
 const icoTipo = t => ICONO_TIPO[t] || '•';
 const icoDeporte = t => ICONO_DEPORTE[t] || '🏅';
 
@@ -72,6 +83,8 @@ function pintaHoy() {
   const m = p.macros || {};
   html += `<div class="grid-hoy">
     <div class="col">
+      ${eventosDe(f).length ? `<div class="card"><div class="label">Agenda</div>
+        <ul class="sesiones">${eventosDe(f).map(e => eventoHtml(e, f)).join('')}</ul></div>` : ''}
       <div class="card">
         <div class="label">Entreno</div>
         ${p.sesiones.length || h.length
@@ -127,6 +140,7 @@ function pintaSemana() {
       <div class="dia-cab"><span class="eyebrow">${nombreDia(f).slice(0, 3)}</span>
         <span class="serif dnum">${nDia(f)}</span>${p ? `<span class="tipo-mini">${icoTipo(p.tipo)}</span>` : ''}</div>
       <ul class="sesiones mini">
+        ${eventosDe(f).map(e => eventoHtml(e, f)).join('')}
         ${(p ? p.sesiones : []).map(s => `<li><span class="ico">${icoDeporte(s.tipo)}</span>
           <span class="que">${esc(s.que)}</span><span class="num">${s.hora ? esc(s.hora) + ' · ' : ''}${s.min}′ · ≈${fmt(s.kcal)}</span></li>`).join('')}
         ${h.map(a => `<li class="hecha"><span class="ico">✓</span><span class="que">${esc(a.nombre)}</span>
@@ -150,13 +164,15 @@ function pintaMes() {
     const fuera = f < primero || f > ultimo, p = plan(f), h = hechas(f);
     celdas += `<div class="mcelda ${fuera ? 'fuera' : ''} ${f === hoy() ? 'es-hoy' : ''}">
       <div class="mnum">${nDia(f)} ${p ? icoTipo(p.tipo) : ''}</div>
+      ${eventosDe(f).map(e => `<div class="chip ev" style="--c:${colorCal(e.cal)}">${e.todo_el_dia ? '' : horaEv(e, f) + ' '}${esc(e.titulo)}</div>`).join('')}
       ${h.length ? h.map(a => `<div class="chip hecha">${icoDeporte(a.tipo)} ${a.km ? a.km.toFixed(1).replace('.', ',') + ' km' : fmt(a.min) + '′'}</div>`).join('')
         : (p ? p.sesiones : []).map(s => `<div class="chip">${icoDeporte(s.tipo)} ${esc(s.que)}</div>`).join('')}
     </div>`;
   }
   $('#view-mes').innerHTML = cabecera('mes', `${MESES[d.getUTCMonth()]} ${d.getUTCFullYear()}`) +
     `<div class="mes">${celdas}</div>
-     <div class="leyenda"><span class="chip">planificado</span><span class="chip hecha">registrado en el reloj</span></div>`;
+     <div class="leyenda"><span class="chip">planificado</span><span class="chip hecha">registrado en el reloj</span>
+       ${calendarios().map(c => `<span class="chip ev" style="--c:${colorCal(c)}">${esc(c)}</span>`).join('')}</div>`;
 }
 
 // ---------------------------------------------------------------- NUTRICION
@@ -238,6 +254,9 @@ async function carga() {
     const r = await fetch('data.json?t=' + Date.now(), { cache: 'no-store' });
     if (!r.ok) throw new Error('HTTP ' + r.status);
     DATA = await r.json();
+    // opcional: sin calendarios (404 o el workflow sin secret) el kiosko sigue igual
+    const ev = await fetch('eventos.json?t=' + Date.now(), { cache: 'no-store' }).catch(() => null);
+    if (ev && ev.ok) EVENTOS = (await ev.json()).eventos || [];
     const g = new Date(DATA.generado);
     $('#estado').textContent = `datos del ${g.getDate()}/${g.getMonth() + 1} ${g.toTimeString().slice(0, 5)}`;
     $('#estado').classList.remove('mal');
