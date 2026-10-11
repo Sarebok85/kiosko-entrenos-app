@@ -165,7 +165,8 @@ function pintaMes() {
     celdas += `<div class="mcelda ${fuera ? 'fuera' : ''} ${f === hoy() ? 'es-hoy' : ''}">
       <div class="mnum">${nDia(f)} ${p ? icoTipo(p.tipo) : ''}</div>
       ${eventosDe(f).map(e => `<div class="chip ev" style="--c:${colorCal(e.cal)}">${e.todo_el_dia ? '' : horaEv(e, f) + ' '}${esc(e.titulo)}</div>`).join('')}
-      ${h.length ? h.map(a => `<div class="chip hecha">${icoDeporte(a.tipo)} ${a.km ? a.km.toFixed(1).replace('.', ',') + ' km' : fmt(a.min) + '′'}</div>`).join('')
+      ${h.length ? h.map(a => `<div class="chip hecha">${icoDeporte(a.tipo)} ${esc(a.nombre)}
+          <small>${a.km ? a.km.toFixed(1).replace('.', ',') + ' km · ' : ''}${fmt(a.min)}′</small></div>`).join('')
         : (p ? p.sesiones : []).map(s => `<div class="chip">${icoDeporte(s.tipo)} ${esc(s.que)}</div>`).join('')}
     </div>`;
   }

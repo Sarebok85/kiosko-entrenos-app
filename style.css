@@ -107,7 +107,10 @@ code { font-size: .85em; background: var(--paper-2); padding: 0 .3em; border-rad
 .mcelda.fuera { opacity: .4; }
 .mnum { font-weight: 700; font-size: 15px; }
 .chip { font-size: 12px; padding: 2px 6px; border-radius: 6px; border: 1px solid var(--line); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.chip.hecha { background: var(--ok); border-color: var(--ok); color: #fff; font-weight: 700; }
+/* el nombre puede ser largo (7'@R1-4x(1000m@R3&5'@R1)): parte en lineas en vez de cortarse */
+.chip.hecha { background: var(--ok); border-color: var(--ok); color: #fff; font-weight: 700;
+  white-space: normal; overflow-wrap: anywhere; line-height: 1.2; padding: 3px 6px; }
+.chip.hecha small { display: block; font-weight: 500; opacity: .9; }
 .leyenda { display: flex; gap: 10px; margin-top: 10px; }
 
 /* NUTRICION */
