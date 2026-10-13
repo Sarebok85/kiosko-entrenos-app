@@ -13,7 +13,7 @@ let DATA = null;
 let EVENTOS = [];     // eventos.json: calendarios de iCloud, lo genera el workflow cada 30'
 const COLORES_CAL = ['#2f6fdf', '#c2410c', '#7c3aed', '#0f766e', '#be185d'];
 let vista = 'hoy';
-const desfase = { semana: 0, mes: 0, nutricion: 0 };
+const desfase = { semana: 0, mes: 0, nutricion: 0, comida: 0 };
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -105,9 +105,20 @@ function pintaHoy() {
       </div>
       ${p.avisos.map(a => `<div class="aviso">⚠ ${esc(a)}</div>`).join('')}
     </div>
-    <div class="card comidas">
-      <div class="label">Qué se come hoy</div>
-      ${p.comidas.map(c => {
+    <div class="card comidas">${comidasHtml(f)}</div>
+  </div>`;
+  $('#view-hoy').innerHTML = html;
+}
+
+// la tarjeta de comidas del dashboard se mueve de lunes a domingo de esta semana; arranca en hoy
+function comidasHtml(hoyF) {
+  const i0 = (fecha(hoyF).getUTCDay() + 6) % 7;
+  desfase.comida = Math.max(-i0, Math.min(6 - i0, desfase.comida));
+  const f = suma(hoyF, desfase.comida), p = plan(f);
+  const nav = (n, txt, off) => `<button class="nav mini ${n ? '' : 'txt'}" data-mover="comida:${n}" ${off ? 'disabled' : ''}>${txt}</button>`;
+  return `<div class="cab-comidas"><div class="label">${desfase.comida ? `Qué se come el ${nombreDia(f)} ${nDia(f)}` : 'Qué se come hoy'}</div>
+      ${nav(-1, '‹', !(i0 + desfase.comida))}${desfase.comida ? nav(0, 'hoy') : ''}${nav(1, '›', i0 + desfase.comida === 6)}</div>
+    ${!p?.comidas.length ? '<p class="serif grande tenue">Sin plan de comidas.</p>' : p.comidas.map(c => {
         const r = receta(c.elegida), nota = notaDe(c.meta);
         return `<div class="comida">
           <div class="ico-grande">${ICONO_COMIDA[sinTildes(c.nombre)] || '🍴'}</div>
@@ -117,10 +128,7 @@ function pintaHoy() {
                 : `<div class="titulo serif tenue">Sin elegir (${c.opciones} opciones)</div>`}
             ${nota ? `<div class="nota">${esc(nota)}</div>` : ''}
           </div></div>`;
-      }).join('')}
-    </div>
-  </div>`;
-  $('#view-hoy').innerHTML = html;
+      }).join('')}`;
 }
 
 function cabecera(clave, titulo) {
@@ -288,6 +296,14 @@ document.addEventListener('click', e => {
     desfase[k] = +n ? desfase[k] + +n : 0;
     pinta();
   }
+});
+// deslizar la tarjeta de comidas: izquierda = dia siguiente, derecha = anterior
+let x0 = null;
+document.addEventListener('pointerdown', e => { x0 = e.target.closest('.comidas') ? e.clientX : null; });
+document.addEventListener('pointerup', e => {
+  const dx = x0 == null ? 0 : e.clientX - x0;
+  x0 = null;
+  if (Math.abs(dx) > 60) { desfase.comida -= Math.sign(dx); pinta(); }
 });
 ['pointerdown', 'keydown'].forEach(t => document.addEventListener(t, actividad));
 reloj();

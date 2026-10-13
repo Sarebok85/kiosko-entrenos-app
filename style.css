@@ -14,7 +14,7 @@ code { font-size: .85em; background: var(--paper-2); padding: 0 .3em; border-rad
 .serif { font-family: var(--serif); font-weight: 400; }
 .tenue { color: var(--mute); }
 
-.stage { display: grid; grid-template-columns: 104px 1fr; height: 100vh; }
+.stage { display: grid; grid-template-columns: 104px 1fr; height: 100vh; height: 100dvh; }
 .rail { display: flex; flex-direction: column; gap: 6px; padding: 18px 10px; border-right: 1px solid var(--line); }
 .rail-item { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 4px;
   border-radius: var(--r); color: var(--ink-2); font-size: 13px; font-weight: 600; letter-spacing: .02em; }
@@ -69,7 +69,12 @@ code { font-size: .85em; background: var(--paper-2); padding: 0 .3em; border-rad
 .macros { display: flex; gap: 8px; flex-wrap: wrap; }
 .pill { padding: 6px 12px; border-radius: 999px; font-weight: 700; font-size: 16px; }
 .pill.p { background: #dcefe6; } .pill.ch { background: #ffe8bf; } .pill.g { background: #f3dcd8; }
-.comidas { display: flex; flex-direction: column; }
+.comidas { display: flex; flex-direction: column; touch-action: pan-y; user-select: none; }
+.cab-comidas { display: flex; align-items: center; gap: 8px; }
+.cab-comidas .label { flex: 1; margin: 0; }
+.nav.mini { width: 40px; height: 40px; font-size: 24px; }
+.nav.mini.txt { width: auto; padding: 0 12px; font-size: 14px; font-weight: 700; border-radius: 999px; }
+.nav:disabled { opacity: .3; }
 .comida { display: grid; grid-template-columns: 52px 1fr; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); }
 .comida:first-of-type { border-top: 0; padding-top: 0; }
 .ico-grande { font-size: 34px; line-height: 1.1; }
@@ -143,4 +148,62 @@ code { font-size: .85em; background: var(--paper-2); padding: 0 .3em; border-rad
   .hero h1 { font-size: 52px; }
   .grid-hoy { grid-template-columns: 1fr; }
   .semana, .mes, .nutri { overflow-x: auto; min-width: 760px; }
+}
+
+/* iPhone 17 en vertical (402×874): menu abajo sobre la barra de inicio, todo mas pequeño */
+@media (max-width: 500px) {
+  .stage { grid-template-columns: minmax(0, 1fr); }
+  .grid-hoy { grid-template-columns: minmax(0, 1fr); }
+  .rail { padding: 4px 4px calc(4px + env(safe-area-inset-bottom)); gap: 2px; overflow: visible; }
+  .rail-item { flex: 1; padding: 8px 2px; font-size: 11px; }
+  .rail-item svg { width: 22px; height: 22px; }
+  .rail-clock { display: none; }     /* el movil ya tiene su reloj */
+  .view { padding: calc(12px + env(safe-area-inset-top)) 14px 16px; }
+  .estado { display: none; }
+  .hero h1 { font-size: 40px; }
+  .tipo { font-size: 15px; padding: 8px 12px; }
+  .grande { font-size: 28px; }
+  .vacio { padding: 32px 16px; }
+  .card { padding: 16px; }
+  .kpi .enorme { font-size: 56px; }
+  .fila3 b { font-size: 20px; }
+  .sesion .que, .evento .que { font-size: 17px; }
+  .comida { grid-template-columns: 36px 1fr; gap: 10px; }
+  .ico-grande { font-size: 26px; }
+  .comida .titulo { font-size: 22px; }
+  .cab { gap: 8px; }
+  .cab h2 { font-size: 28px; }
+  .nav { width: 40px; height: 40px; font-size: 24px; flex: none; }
+  .nav.txt { padding: 0 12px; font-size: 14px; }
+  .revision { columns: 1; }
+  .semana { grid-template-columns: minmax(0, 1fr); min-width: 0; }
+  .dia { flex-direction: row; flex-wrap: wrap; align-items: flex-start; }
+  .dia-cab { width: 100%; }
+  .dia .sesiones { flex: 1; }
+  .pie { margin: 0; border: 0; padding: 0; text-align: right; }
+}
+
+/* iPhone 17 en horizontal (874×402): menu lateral estrecho, el notch a la izquierda o derecha */
+@media (orientation: landscape) and (max-height: 500px) {
+  .stage { grid-template-columns: calc(68px + env(safe-area-inset-left)) 1fr; grid-template-rows: none; }
+  .rail { flex-direction: column; order: 0; border: 0; border-right: 1px solid var(--line); overflow: visible;
+    padding: 6px 4px 6px calc(4px + env(safe-area-inset-left)); gap: 2px; }
+  .rail-item { padding: 5px 2px; font-size: 10px; gap: 2px; }
+  .rail-item svg { width: 20px; height: 20px; }
+  .rail-clock { margin: auto 0 0; padding: 0; font-size: 18px; }
+  .view { padding: 12px calc(14px + env(safe-area-inset-right)) calc(12px + env(safe-area-inset-bottom)) 14px; }
+  .hero { margin-bottom: 10px; }
+  .hero h1 { font-size: 36px; }
+  .tipo { font-size: 15px; padding: 8px 12px; }
+  .grid-hoy { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+  .card { padding: 14px; }
+  .kpi .enorme { font-size: 52px; }
+  .fila3 b { font-size: 20px; }
+  .sesion .que, .evento .que { font-size: 17px; }
+  .comida .titulo { font-size: 21px; }
+  .cab { margin-bottom: 10px; }
+  .cab h2 { font-size: 28px; }
+  .nav { width: 40px; height: 40px; font-size: 24px; }
+  .semana, .mes, .nutri { min-width: 0; }
+  .mcelda { min-height: 64px; }
 }
