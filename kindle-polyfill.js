@@ -86,17 +86,6 @@
   // la pagina va girada -90deg (kindle.css) y este WebKit manda el toque al elemento que habria ahi sin girar:
   // se tira ese click y se lanza otro sobre el boton que de verdad esta bajo el dedo (por offsets, que no giran)
   var propio = false, ultimo = 0;
-  // shortcut: traza temporal; el console.log de WebLaunch no se guarda, pero cada URL pedida sale en
-  // /var/log/messages del Kindle (s_requestStartingHandler). Quitar al cerrar
-  var baliza = function (txt) { new Image().src = 'log?' + encodeURIComponent(txt) + '&' + (+new Date()); };
-  baliza('KIOSKO carga win=' + window.innerWidth + 'x' + window.innerHeight);
-  ['touchstart', 'touchend', 'mousedown', 'mouseup', 'click'].forEach(function (t) {
-    document.addEventListener(t, function (e) {
-      var p = e.changedTouches ? e.changedTouches[0] : e;
-      baliza('KIOSKO ev ' + t + ' ' + p.clientX + ',' + p.clientY + ' propio=' + propio);
-    }, true);
-  });
-  window.addEventListener('scroll', function () { baliza('KIOSKO scroll ' + window.scrollX + ',' + window.scrollY); }, true);
   var enStage = function (x, y) { return { x: 800 - y, y: x }; };   // pantalla 600x800 -> stage 800x600
   var caja = function (el) {
     var x = 0, y = 0, e = el;
@@ -116,38 +105,16 @@
     if (propio) return;
     e.preventDefault(); e.stopPropagation();
     var t = e.changedTouches ? e.changedTouches[0] : e;
-    var p = enStage(t.clientX, t.clientY), el = bajoDedo(p);
-    // shortcut: traza temporal para depurar los toques en el Kindle (sale en /var/log/messages); quitar al cerrar
-    var traza = 'KIOSKO ' + e.type + ' cli=' + t.clientX + ',' + t.clientY + ' pag=' + t.pageX + ',' + t.pageY +
-      ' stage=' + p.x + ',' + p.y + ' el=' + (el ? el.getAttribute('data-go') || el.getAttribute('data-mover') : '-') +
-      ' win=' + window.innerWidth + 'x' + window.innerHeight + ' scroll=' + window.scrollX + ',' + window.scrollY;
-    baliza(traza); estado(traza.slice(7));
     if (new Date() - ultimo < 500) return;      // touchend y su click: un solo toque
     ultimo = new Date();
+    var el = bajoDedo(enStage(t.clientX, t.clientY));
     if (!el) return;
     var c = document.createEvent('MouseEvents');
     c.initMouseEvent('click', true, true, window, 1, 0, 0, 0, 0, false, false, false, false, 0, null);
     propio = true; el.dispatchEvent(c); propio = false;
-    setTimeout(function () {
-      var v = document.querySelectorAll('.view.activa'), txt = [];
-      for (var i = 0; i < v.length; i++) txt.push(v[i].id + ':' + v[i].innerHTML.length);
-      baliza('KIOSKO vistas ' + txt.join(' ') + ' estado=' + document.getElementById('estado').innerHTML.slice(0, 80));
-    }, 800);
   };
   document.addEventListener('touchend', toque, true);
   document.addEventListener('click', toque, true);
-  // al tocar, WebKit enfoca el boton y desplaza hasta donde estaria sin girar (fuera de pantalla): todo en blanco.
-  // sin foco y con todo el desplazamiento a cero, la pagina se queda donde esta
-  var aCero = function () {
-    window.scrollTo(0, 0);
-    var els = document.querySelectorAll('html, body, .stage, .views, .view, .rail');
-    for (var i = 0; i < els.length; i++) { els[i].scrollTop = 0; els[i].scrollLeft = 0; }
-  };
-  document.addEventListener('mousedown', function (e) { e.preventDefault(); }, true);
-  window.addEventListener('scroll', aCero, true);
-  ['touchstart', 'touchend', 'click'].forEach(function (t) {
-    document.addEventListener(t, function () { aCero(); setTimeout(aCero, 50); setTimeout(aCero, 300); }, true);
-  });
 
   // tinta electronica: un destello negro cada 15' borra el rastro de las pantallas anteriores
   setInterval(function () {
