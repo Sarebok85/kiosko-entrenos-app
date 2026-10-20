@@ -75,6 +75,17 @@
   // la pagina va girada -90deg (kindle.css) y este WebKit manda el toque al elemento que habria ahi sin girar:
   // se tira ese click y se lanza otro sobre el boton que de verdad esta bajo el dedo (por offsets, que no giran)
   var propio = false, ultimo = 0;
+  // shortcut: traza temporal; el console.log de WebLaunch no se guarda, pero cada URL pedida sale en
+  // /var/log/messages del Kindle (s_requestStartingHandler). Quitar al cerrar
+  var baliza = function (txt) { new Image().src = 'log?' + encodeURIComponent(txt) + '&' + (+new Date()); };
+  baliza('KIOSKO carga win=' + window.innerWidth + 'x' + window.innerHeight);
+  ['touchstart', 'touchend', 'mousedown', 'mouseup', 'click'].forEach(function (t) {
+    document.addEventListener(t, function (e) {
+      var p = e.changedTouches ? e.changedTouches[0] : e;
+      baliza('KIOSKO ev ' + t + ' ' + p.clientX + ',' + p.clientY + ' propio=' + propio);
+    }, true);
+  });
+  window.addEventListener('scroll', function () { baliza('KIOSKO scroll ' + window.scrollX + ',' + window.scrollY); }, true);
   var enStage = function (x, y) { return { x: 800 - y, y: x }; };   // pantalla 600x800 -> stage 800x600
   var caja = function (el) {
     var x = 0, y = 0, e = el;
@@ -99,7 +110,7 @@
     var traza = 'KIOSKO ' + e.type + ' cli=' + t.clientX + ',' + t.clientY + ' pag=' + t.pageX + ',' + t.pageY +
       ' stage=' + p.x + ',' + p.y + ' el=' + (el ? el.getAttribute('data-go') || el.getAttribute('data-mover') : '-') +
       ' win=' + window.innerWidth + 'x' + window.innerHeight + ' scroll=' + window.scrollX + ',' + window.scrollY;
-    console.log(traza); estado(traza.slice(7));
+    baliza(traza); estado(traza.slice(7));
     if (new Date() - ultimo < 500) return;      // touchend y su click: un solo toque
     ultimo = new Date();
     if (!el) return;
