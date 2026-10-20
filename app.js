@@ -29,7 +29,8 @@ const nDia = f => fecha(f).getUTCDate();
 const nombreDia = f => DIAS[fecha(f).getUTCDay()];
 const plan = f => (DATA.dias || {})[f];
 const hechas = f => (DATA.hechas || {})[f] || [];
-const calendarios = () => [...new Set(EVENTOS.map(e => e.cal))];
+// sin Set: kindle.js es este fichero pasado a ES5 y el navegador del Kindle no lo tiene
+const calendarios = () => EVENTOS.map(e => e.cal).filter((c, i, a) => a.indexOf(c) === i);
 const colorCal = c => COLORES_CAL[calendarios().indexOf(c) % COLORES_CAL.length];
 // los de todo el dia primero; un evento de varios dias sale en todos ellos
 const eventosDe = f => EVENTOS.filter(e => e.inicio.slice(0, 10) <= f && f <= e.fin.slice(0, 10))
@@ -305,7 +306,8 @@ document.addEventListener('pointerup', e => {
   x0 = null;
   if (Math.abs(dx) > 60) { desfase.comida -= Math.sign(dx); pinta(); }
 });
-['pointerdown', 'keydown'].forEach(t => document.addEventListener(t, actividad));
+// mousedown: el navegador del Kindle no tiene pointer events
+['pointerdown', 'mousedown', 'keydown'].forEach(t => document.addEventListener(t, actividad));
 reloj();
 setInterval(reloj, 10e3);
 setInterval(carga, RECARGA_MS);

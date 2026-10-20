@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <!-- Kindle Touch en horizontal: el mismo kiosko, en ES5 y blanco y negro (ver kindle.css) -->
+  <meta name="viewport" content="width=600, user-scalable=no">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Run-AI Kiosko</title>
+  <link rel="stylesheet" href="kindle.css">
+</head>
+<body>
+  <div class="stage">
+    <nav class="rail" aria-label="Secciones">
+      <button class="rail-item" data-go="hoy"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg><span>Hoy</span></button>
+      <button class="rail-item" data-go="semana"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M8 14v3M12 14v3M16 14v3"/></svg><span>Semana</span></button>
+      <button class="rail-item" data-go="mes"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="M7 14h2M11 14h2M15 14h2M7 17h2M11 17h2"/></svg><span>Mes</span></button>
+      <button class="rail-item" data-go="nutricion"><svg viewBox="0 0 24 24"><path d="M7 3v8a2 2 0 0 0 4 0V3M9 11v10M17 3c-2 0-3 3-3 6s1 4 3 4v8"/></svg><span>Comidas</span></button>
+      <button class="rail-item" data-go="revision"><svg viewBox="0 0 24 24"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg><span>Revisión</span></button>
+      <div class="rail-clock" id="reloj"></div>
+    </nav>
+    <main class="views">
+      <section class="view" id="view-hoy"></section>
+      <section class="view" id="view-semana"></section>
+      <section class="view" id="view-mes"></section>
+      <section class="view" id="view-nutricion"></section>
+      <section class="view" id="view-revision"></section>
+    </main>
+    <div class="estado" id="estado"></div>
+  </div>
+  <script src="kindle-polyfill.js"></script>
+  <script src="kindle.js"></script>
+</body>
+</html>

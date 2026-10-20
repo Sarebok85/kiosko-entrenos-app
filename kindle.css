@@ -1,0 +1,138 @@
+/* Kindle Touch (600x800, 16 grises, WebKit de 2011): el kiosko de style.css a 800x600 en horizontal.
+   Sin variables, grid, flex moderno ni gap; solo negro, blanco y un gris. Nada hace scroll: todo cabe. */
+* { margin: 0; -webkit-box-sizing: border-box; box-sizing: border-box; }
+html, body { width: 600px; height: 800px; overflow: hidden; background: #fff; color: #000;
+  font: 400 16px/1.3 sans-serif; -webkit-user-select: none; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; }
+code { font-size: .85em; border: 1px solid #000; padding: 0 .2em; }
+.serif { font-family: serif; }
+.tenue { color: #555; }
+b { font-weight: 700; }
+
+/* horizontal girando la pagina: el Kindle se apoya con los botones a la derecha.
+   Para el otro lado: rotate(-90deg) con top:800px; left:0 */
+.stage { position: absolute; top: 0; left: 600px; width: 800px; height: 600px;
+  -webkit-transform-origin: 0 0; -webkit-transform: rotate(90deg); }
+
+.rail { position: absolute; top: 0; left: 0; bottom: 0; width: 84px; padding: 8px 6px; border-right: 2px solid #000; }
+.rail-item { display: block; width: 100%; padding: 8px 0 6px; margin-bottom: 4px; text-align: center;
+  font-size: 12px; font-weight: 700; border-radius: 10px; }
+.rail-item svg { display: block; width: 28px; height: 28px; margin: 0 auto 3px; fill: none; stroke: #000;
+  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.rail-item.activa { background: #000; color: #fff; }
+.rail-item.activa svg { stroke: #fff; }
+.rail-clock { position: absolute; left: 0; right: 0; bottom: 14px; text-align: center; font-size: 24px; }
+
+.views { position: absolute; top: 0; left: 84px; right: 0; bottom: 0; overflow: hidden; }
+.view { display: none; height: 100%; overflow: hidden; padding: 14px 16px 22px; }
+.view.activa { display: block; }
+.estado { position: absolute; right: 10px; bottom: 4px; font-size: 11px; color: #555; }
+.estado.mal { color: #000; font-weight: 700; }
+
+/* los emojis no estan en las fuentes del Kindle */
+.ico, .ico-grande, .tipo-mini { display: none; }
+
+.eyebrow, .label { text-transform: uppercase; letter-spacing: .06em; font-size: 11px; font-weight: 700; color: #555; }
+.label { margin-bottom: 6px; }
+.card { border: 2px solid #000; border-radius: 10px; padding: 10px 12px; margin-bottom: 10px; }
+.aviso { border: 2px solid #000; border-radius: 8px; padding: 6px 10px; font-weight: 700; margin-bottom: 10px; }
+.num { color: #555; white-space: nowrap; }
+.grande { font-size: 28px; }
+.vacio { text-align: center; padding: 40px; }
+
+/* HOY */
+.hero { overflow: hidden; margin-bottom: 10px; }
+.hero > div:first-child { float: left; }
+.hero h1 { font-size: 46px; line-height: 1; font-weight: 400; }
+.tipo { float: right; margin-top: 14px; font-weight: 700; font-size: 16px; text-transform: uppercase; letter-spacing: .06em;
+  padding: 8px 14px; border-radius: 20px; background: #000; color: #fff; }
+.tipo-descanso { background: #fff; color: #000; border: 2px solid #000; }
+.grid-hoy { overflow: hidden; }
+.grid-hoy .col { float: left; width: 42%; }
+.grid-hoy .comidas { float: right; width: 56%; }
+.sesiones { list-style: none; padding: 0; }
+.sesiones li { margin-bottom: 6px; }
+.sesion .hora, .evento .hora { display: inline-block; width: 44px; font-weight: 700; }
+.sesion .que, .evento .que { font-weight: 700; font-size: 16px; }
+.sesion .num, .evento .num { display: block; margin-left: 44px; font-size: 13px; }
+.evento { border-left: 4px solid #000; padding-left: 6px; }
+.kpi .enorme { font-size: 48px; line-height: 1; }
+.kpi .ud { color: #555; font-weight: 700; }
+.fila3 { overflow: hidden; margin: 8px 0; border-top: 1px solid #000; padding-top: 6px; }
+.fila3 > div { float: left; width: 33.3%; }
+.fila3 .label { margin-bottom: 0; }
+.fila3 b { font-size: 20px; }
+.pill { display: inline-block; padding: 3px 8px; margin-right: 4px; border: 1px solid #000; border-radius: 12px; font-weight: 700; font-size: 13px; }
+.cab-comidas { overflow: hidden; margin-bottom: 4px; }
+.cab-comidas .label { float: left; margin: 10px 0 0; }
+.cab-comidas .nav { float: right; margin-left: 6px; }
+.nav.mini { width: 36px; height: 36px; font-size: 22px; }
+.nav.mini.txt { width: auto; padding: 0 10px; font-size: 13px; font-weight: 700; }
+.nav[disabled] { visibility: hidden; }
+.comida { padding: 4px 0; border-top: 1px solid #000; }
+.comida:first-of-type { border-top: 0; }
+.cab-comida { overflow: hidden; text-transform: uppercase; font-size: 12px; letter-spacing: .06em; }
+.cab-comida .num { float: right; }
+.comida .titulo { font-size: 16px; line-height: 1.1; margin: 1px 0 2px; }
+.comida .detalle { font-size: 11px; line-height: 1.25; max-height: 28px; overflow: hidden; }
+.comida .nota { display: none; }   /* no cabe: el detalle ya dice lo que hay */
+
+/* cabecera con flechas */
+.cab { overflow: hidden; margin-bottom: 8px; }
+.cab h2 { float: left; font-size: 28px; line-height: 40px; font-weight: 400; margin: 0 10px; }
+.cab .nav { float: left; }
+.nav { width: 40px; height: 40px; border-radius: 20px; border: 2px solid #000; font-size: 24px; line-height: 1; }
+.nav.txt { width: auto; padding: 0 14px; font-size: 14px; font-weight: 700; }
+
+/* SEMANA: tabla de 7 columnas */
+.semana { display: table; table-layout: fixed; width: 100%; border-spacing: 4px 0; }
+.dia { display: table-cell; height: 500px; vertical-align: top; position: relative; border: 1px solid #000; border-radius: 8px; padding: 6px 5px; overflow: hidden; }
+.dia.pasado { color: #555; }
+.es-hoy { border: 3px solid #000 !important; }
+.dia-cab { margin-bottom: 4px; }
+.dnum { font-size: 24px; line-height: 1; }
+.sesiones.mini li { font-size: 12px; line-height: 1.2; padding: 4px; margin-bottom: 4px; border: 1px solid #999; border-radius: 6px; word-wrap: break-word; }
+.sesiones.mini .que { display: block; font-weight: 700; }
+.sesiones.mini .num { display: block; font-size: 11px; white-space: normal; margin: 0; }
+.sesiones.mini .hora { width: auto; font-size: 11px; }
+.sesiones.mini li.hecha { border: 2px solid #000; }
+.sesiones.mini li.tenue { border: 0; }
+.pie { position: absolute; left: 5px; right: 5px; bottom: 5px; border-top: 1px solid #000; padding-top: 4px; font-size: 12px; }
+.pie .label { font-size: 9px; margin: 0; }
+
+/* MES: 7 columnas flotantes, alto fijo para que quepan 6 semanas */
+.mes { overflow: hidden; }
+.mcab, .mcelda { float: left; width: 14.28%; }
+.mcab { text-align: center; text-transform: uppercase; font-size: 11px; font-weight: 700; color: #555; height: 18px; }
+.mcelda { height: 74px; padding: 2px 3px; border: 1px solid #999; overflow: hidden; }
+.mcelda.fuera { color: #999; }
+.mcelda.es-hoy { border-width: 3px; }
+.mnum { font-weight: 700; font-size: 12px; }
+.chip { display: block; font-size: 10px; line-height: 1.2; padding: 1px 3px; margin-bottom: 1px; border: 1px solid #999; border-radius: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.chip.hecha { background: #000; color: #fff; border-color: #000; font-weight: 700; }
+.chip.hecha small { display: none; }
+.chip.ev { border: 0; border-left: 3px solid #000; }
+.leyenda { clear: both; padding-top: 6px; }
+.leyenda .chip { display: inline-block; margin-right: 6px; font-size: 11px; }
+
+/* NUTRICION: 8 columnas flotantes */
+.nutri { overflow: hidden; }
+.ncab, .nfila, .ncelda { float: left; width: 12.5%; padding: 3px; overflow: hidden; }
+.ncab { height: 40px; font-size: 12px; }
+.ncab b { display: block; }
+.ncab.es-hoy { background: #000; color: #fff; border-radius: 6px; }
+.ncab.es-hoy .eyebrow { color: #fff; }
+.nfila { height: 76px; padding-top: 20px; font-size: 10px; font-weight: 700; text-transform: uppercase; text-align: center; }
+.ncelda { height: 76px; font-size: 11px; line-height: 1.15; border: 1px solid #999; border-radius: 6px; }
+.ncelda span { display: block; max-height: 52px; overflow: hidden; }
+.ncelda small { display: block; color: #555; }
+.ncelda.vacia { width: 87.5%; text-align: center; padding-top: 24px; }
+
+/* REVISION: dos columnas; lo que no cabe se corta (en tinta no hay scroll comodo) */
+.revision { -webkit-column-count: 2; -webkit-column-gap: 12px; height: 520px; overflow: hidden; }
+.revision .card { font-size: 12px; line-height: 1.25; display: inline-block; width: 100%; }
+.revision h3 { font: 400 18px/1.1 serif; margin-bottom: 4px; }
+.revision p, .revision ul, .revision ol, .revision table { margin-bottom: 5px; }
+.revision ul, .revision ol { padding-left: 16px; }
+.revision table { border-collapse: collapse; width: 100%; font-size: 11px; }
+.revision th, .revision td { border-bottom: 1px solid #999; padding: 2px 3px; text-align: left; }

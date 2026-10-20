@@ -34,6 +34,8 @@ jobs:
       - run: pip install -q icalendar recurring-ical-events && python .github/calendario.py
         env:
           CALENDARIOS: ${{ secrets.CALENDARIOS }}
+      # kindle.js: app.js en ES5 para el Kindle (kindle.html); como eventos.json, nunca entra en git
+      - run: npx -y -p @swc/cli@0.7.8 -p @swc/core@1.13.5 swc app.js -o kindle.js -C jsc.target=es5 -C jsc.assumptions.iterableIsArray=true
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

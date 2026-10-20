@@ -1,0 +1,82 @@
+// Lo que le falta al navegador del Kindle Touch (WebKit de 2011, ES5) para correr kindle.js,
+// que es app.js pasado a ES5 por el workflow. Solo lo que app.js usa: si se usa algo nuevo alli, va aqui.
+(function () {
+  var estado = function (txt) { var e = document.getElementById('estado'); if (e) e.innerHTML = txt; };
+  // sin consola en el Kindle: los errores a la vista
+  window.onerror = function (msg, url, linea) { estado('error: ' + msg + ' (' + linea + ')'); };
+  if (!window.console) window.console = { error: function () {}, log: function () {} };
+
+  if (!window.Promise) {
+    // shortcut: Promise minima (then/catch/resolve/reject), basta para el async/await de carga()
+    var P = function (fn) {
+      var st = 0, val, cola = [], self = this;
+      var fin = function (s, v) {
+        if (st) return;
+        if (s === 1 && v && typeof v.then === 'function') { v.then(function (x) { fin(1, x); }, function (x) { fin(2, x); }); return; }
+        st = s; val = v;
+        setTimeout(function () { for (var i = 0; i < cola.length; i++) cola[i](); }, 0);
+      };
+      this.then = function (ok, mal) {
+        return new P(function (res, rej) {
+          var paso = function () {
+            var f = st === 1 ? ok : mal;
+            if (typeof f !== 'function') return (st === 1 ? res : rej)(val);
+            try { res(f(val)); } catch (e) { rej(e); }
+          };
+          st ? setTimeout(paso, 0) : cola.push(paso);
+        });
+      };
+      this['catch'] = function (mal) { return self.then(null, mal); };
+      try { fn(function (v) { fin(1, v); }, function (v) { fin(2, v); }); } catch (e) { fin(2, e); }
+    };
+    P.resolve = function (v) { return new P(function (r) { r(v); }); };
+    P.reject = function (v) { return new P(function (_, r) { r(v); }); };
+    window.Promise = P;
+  }
+
+  if (!window.fetch) window.fetch = function (url) {
+    return new Promise(function (res, rej) {
+      var x = new XMLHttpRequest();
+      x.open('GET', url, true);
+      x.onreadystatechange = function () {
+        if (x.readyState !== 4) return;
+        if (!x.status) return rej(new Error('sin red'));
+        var t = x.responseText;
+        res({ ok: x.status >= 200 && x.status < 300, status: x.status,
+              json: function () { return Promise.resolve(JSON.parse(t)); } });
+      };
+      x.send();
+    });
+  };
+
+  // sin normalize no se quitan tildes: "media mañana" se queda sin icono, nada mas
+  if (!String.prototype.normalize) String.prototype.normalize = function () { return String(this); };
+  if (!String.prototype.startsWith) String.prototype.startsWith = function (s) { return this.indexOf(s) === 0; };
+  if (!Array.prototype.includes) Array.prototype.includes = function (v) { return this.indexOf(v) !== -1; };
+  if (!Array.prototype.find) Array.prototype.find = function (f) {
+    for (var i = 0; i < this.length; i++) if (f(this[i], i, this)) return this[i];
+  };
+  if (!Math.sign) Math.sign = function (x) { return x > 0 ? 1 : x < 0 ? -1 : 0; };
+  if (window.NodeList && !NodeList.prototype.forEach) NodeList.prototype.forEach = Array.prototype.forEach;
+  var EP = Element.prototype;
+  if (!EP.matches) EP.matches = EP.webkitMatchesSelector;
+  if (!EP.closest) EP.closest = function (s) {
+    for (var e = this; e && e.nodeType === 1; e = e.parentNode) if (e.matches(s)) return e;
+    return null;
+  };
+  if (!('dataset' in document.documentElement)) Object.defineProperty(EP, 'dataset', { get: function () {
+    var d = {}, a = this.attributes;
+    for (var i = 0; i < a.length; i++) if (a[i].name.indexOf('data-') === 0)
+      d[a[i].name.slice(5).replace(/-(\w)/g, function (_, c) { return c.toUpperCase(); })] = a[i].value;
+    return d;
+  } });
+  if (!history.replaceState) history.replaceState = function () {};
+
+  // tinta electronica: un destello negro cada 15' borra el rastro de las pantallas anteriores
+  setInterval(function () {
+    var n = document.createElement('div');
+    n.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:99';
+    document.body.appendChild(n);
+    setTimeout(function () { document.body.removeChild(n); }, 400);
+  }, 15 * 60e3);
+})();
