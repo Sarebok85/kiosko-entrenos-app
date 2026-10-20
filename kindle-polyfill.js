@@ -94,9 +94,14 @@
     if (propio) return;
     e.preventDefault(); e.stopPropagation();
     var t = e.changedTouches ? e.changedTouches[0] : e;
+    var p = enStage(t.clientX, t.clientY), el = bajoDedo(p);
+    // shortcut: traza temporal para depurar los toques en el Kindle (sale en /var/log/messages); quitar al cerrar
+    var traza = 'KIOSKO ' + e.type + ' cli=' + t.clientX + ',' + t.clientY + ' pag=' + t.pageX + ',' + t.pageY +
+      ' stage=' + p.x + ',' + p.y + ' el=' + (el ? el.getAttribute('data-go') || el.getAttribute('data-mover') : '-') +
+      ' win=' + window.innerWidth + 'x' + window.innerHeight + ' scroll=' + window.scrollX + ',' + window.scrollY;
+    console.log(traza); estado(traza.slice(7));
     if (new Date() - ultimo < 500) return;      // touchend y su click: un solo toque
     ultimo = new Date();
-    var el = bajoDedo(enStage(t.clientX, t.clientY));
     if (!el) return;
     var c = document.createEvent('MouseEvents');
     c.initMouseEvent('click', true, true, window, 1, 0, 0, 0, 0, false, false, false, false, 0, null);
