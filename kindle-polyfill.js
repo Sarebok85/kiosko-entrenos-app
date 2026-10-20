@@ -71,6 +71,17 @@
     return d;
   } });
   if (!history.replaceState) history.replaceState = function () {};
+  // classList.toggle(clase, force): este WebKit ignora force y alterna, y ir() de app.js lo usa para mostrar la vista
+  var prueba = document.createElement('i');
+  prueba.classList.toggle('a', false);
+  if (prueba.classList.contains('a')) {
+    var alterna = DOMTokenList.prototype.toggle;
+    DOMTokenList.prototype.toggle = function (c, force) {
+      if (force === undefined) return alterna.call(this, c);
+      force ? this.add(c) : this.remove(c);
+      return !!force;
+    };
+  }
 
   // la pagina va girada -90deg (kindle.css) y este WebKit manda el toque al elemento que habria ahi sin girar:
   // se tira ese click y se lanza otro sobre el boton que de verdad esta bajo el dedo (por offsets, que no giran)
@@ -117,6 +128,11 @@
     var c = document.createEvent('MouseEvents');
     c.initMouseEvent('click', true, true, window, 1, 0, 0, 0, 0, false, false, false, false, 0, null);
     propio = true; el.dispatchEvent(c); propio = false;
+    setTimeout(function () {
+      var v = document.querySelectorAll('.view.activa'), txt = [];
+      for (var i = 0; i < v.length; i++) txt.push(v[i].id + ':' + v[i].innerHTML.length);
+      baliza('KIOSKO vistas ' + txt.join(' ') + ' estado=' + document.getElementById('estado').innerHTML.slice(0, 80));
+    }, 800);
   };
   document.addEventListener('touchend', toque, true);
   document.addEventListener('click', toque, true);
