@@ -104,6 +104,18 @@
   };
   document.addEventListener('touchend', toque, true);
   document.addEventListener('click', toque, true);
+  // al tocar, WebKit enfoca el boton y desplaza hasta donde estaria sin girar (fuera de pantalla): todo en blanco.
+  // sin foco y con todo el desplazamiento a cero, la pagina se queda donde esta
+  var aCero = function () {
+    window.scrollTo(0, 0);
+    var els = document.querySelectorAll('html, body, .stage, .views, .view, .rail');
+    for (var i = 0; i < els.length; i++) { els[i].scrollTop = 0; els[i].scrollLeft = 0; }
+  };
+  document.addEventListener('mousedown', function (e) { e.preventDefault(); }, true);
+  window.addEventListener('scroll', aCero, true);
+  ['touchstart', 'touchend', 'click'].forEach(function (t) {
+    document.addEventListener(t, function () { aCero(); setTimeout(aCero, 50); setTimeout(aCero, 300); }, true);
+  });
 
   // tinta electronica: un destello negro cada 15' borra el rastro de las pantallas anteriores
   setInterval(function () {
