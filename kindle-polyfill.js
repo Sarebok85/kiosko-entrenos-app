@@ -72,6 +72,39 @@
   } });
   if (!history.replaceState) history.replaceState = function () {};
 
+  // la pagina va girada -90deg (kindle.css) y este WebKit manda el toque al elemento que habria ahi sin girar:
+  // se tira ese click y se lanza otro sobre el boton que de verdad esta bajo el dedo (por offsets, que no giran)
+  var propio = false, ultimo = 0;
+  var enStage = function (x, y) { return { x: 800 - y, y: x }; };   // pantalla 600x800 -> stage 800x600
+  var caja = function (el) {
+    var x = 0, y = 0, e = el;
+    for (; e && !/\bstage\b/.test(e.className); e = e.offsetParent) { x += e.offsetLeft; y += e.offsetTop; }
+    return { x: x, y: y, w: el.offsetWidth, h: el.offsetHeight };
+  };
+  var bajoDedo = function (p) {
+    var mejor = null, area = 1e9, els = document.querySelectorAll('[data-go], [data-mover]');
+    for (var i = 0; i < els.length; i++) {
+      var c = caja(els[i]);
+      if (!c.w || els[i].disabled || p.x < c.x || p.x > c.x + c.w || p.y < c.y || p.y > c.y + c.h) continue;
+      if (c.w * c.h < area) { area = c.w * c.h; mejor = els[i]; }
+    }
+    return mejor;
+  };
+  var toque = function (e) {
+    if (propio) return;
+    e.preventDefault(); e.stopPropagation();
+    var t = e.changedTouches ? e.changedTouches[0] : e;
+    if (new Date() - ultimo < 500) return;      // touchend y su click: un solo toque
+    ultimo = new Date();
+    var el = bajoDedo(enStage(t.clientX, t.clientY));
+    if (!el) return;
+    var c = document.createEvent('MouseEvents');
+    c.initMouseEvent('click', true, true, window, 1, 0, 0, 0, 0, false, false, false, false, 0, null);
+    propio = true; el.dispatchEvent(c); propio = false;
+  };
+  document.addEventListener('touchend', toque, true);
+  document.addEventListener('click', toque, true);
+
   // tinta electronica: un destello negro cada 15' borra el rastro de las pantallas anteriores
   setInterval(function () {
     var n = document.createElement('div');
