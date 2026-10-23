@@ -6,8 +6,9 @@ const ICONO_DEPORTE = { running: '🏃', soccer: '⚽', strength_training: '🏋
                         hiking: '🥾', cycling: '🚴' };
 const ICONO_TIPO = { calidad: '⚡', larga: '🏔️', facil: '🌿', descanso: '😴' };
 const ICONO_COMIDA = { desayuno: '🍳', 'media manana': '🍎', comida: '🍽️', merienda: '🥪', cena: '🌙' };
-const VUELTA_A_HOY_MS = 3 * 60e3;     // sin tocar la pantalla, vuelve al dashboard
-const RECARGA_MS = 15 * 60e3;         // relee data.json: el agente publica los domingos
+const KINDLE = !!window.KINDLE;      // lo pone kindle-polyfill.js: va a bateria, cada repintado cuenta
+const VUELTA_A_HOY_MS = 3 * 60e3;     // sin tocar la pantalla, vuelve al dashboard (en el Kindle no)
+const RECARGA_MS = (KINDLE ? 24 * 60 : 15) * 60e3;   // relee data.json: el agente publica los domingos
 
 let DATA = null;
 let EVENTOS = [];     // eventos.json: calendarios de iCloud, lo genera el workflow cada 30'
@@ -280,8 +281,7 @@ async function carga() {
 
 let ultimoDia = hoy(), temporizador = null;
 function reloj() {
-  const d = new Date();
-  $('#reloj').innerHTML = `<b>${d.toTimeString().slice(0, 5)}</b>`;
+  if (!KINDLE) $('#reloj').innerHTML = `<b>${new Date().toTimeString().slice(0, 5)}</b>`;
   if (hoy() !== ultimoDia) { ultimoDia = hoy(); pinta(); }     // a medianoche cambia "hoy"
 }
 function actividad() {
@@ -307,10 +307,10 @@ document.addEventListener('pointerup', e => {
   if (Math.abs(dx) > 60) { desfase.comida -= Math.sign(dx); pinta(); }
 });
 // mousedown: el navegador del Kindle no tiene pointer events
-['pointerdown', 'mousedown', 'keydown'].forEach(t => document.addEventListener(t, actividad));
+if (!KINDLE) ['pointerdown', 'mousedown', 'keydown'].forEach(t => document.addEventListener(t, actividad));
 reloj();
-setInterval(reloj, 10e3);
+setInterval(reloj, KINDLE ? 3600e3 : 10e3);     // en el Kindle solo vigila el cambio de dia
 setInterval(carga, RECARGA_MS);
 ir(location.hash.slice(1) || 'hoy');
 carga();
-actividad();
+if (!KINDLE) actividad();

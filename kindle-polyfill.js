@@ -1,5 +1,6 @@
 // Lo que le falta al navegador del Kindle Touch (WebKit de 2011, ES5) para correr kindle.js,
 // que es app.js pasado a ES5 por el workflow. Solo lo que app.js usa: si se usa algo nuevo alli, va aqui.
+window.KINDLE = true;   // app.js: sin reloj, sin vuelta a Hoy y recarga diaria, por la bateria
 (function () {
   var estado = function (txt) { var e = document.getElementById('estado'); if (e) e.innerHTML = txt; };
   // sin consola en el Kindle: los errores a la vista
