@@ -1,0 +1,154 @@
+<!doctype html>
+<!-- Página provisional para la media del 8/11/2026. Fuente: garmin-ai/carrera/2026-11-08-media-pilar-horadada.md.
+     Bórrala (y su enlace en index.html) después de la carrera. -->
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#f2eee6">
+  <title>Plan 21K</title>
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Instrument+Serif:ital@0;1&display=swap">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    html, body { overflow: auto; height: auto; -webkit-user-select: text; user-select: text; }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 20px 16px 48px; display: flex; flex-direction: column; gap: var(--gap); }
+    .volver { color: var(--mute); text-decoration: none; font-weight: 600; font-size: 15px; }
+    .hero h1 { font-size: clamp(44px, 9vw, 76px); }
+    .hero { flex-wrap: wrap; gap: 12px; }
+    .cuenta { font: 800 20px/1 var(--sans); font-stretch: 80%; }
+    .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--gap); }
+    .reglas { padding-left: 1.2em; display: flex; flex-direction: column; gap: 8px; }
+    .reglas b { font-weight: 800; }
+    table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+    th { text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--mute); padding: 6px 6px; }
+    td { padding: 7px 6px; border-top: 1px solid var(--line); vertical-align: top; }
+    td.km { font-weight: 800; font-size: 20px; width: 2.5em; }
+    td.ritmo { font-weight: 700; font-size: 20px; white-space: nowrap; }
+    td.fc, td.paso { white-space: nowrap; color: var(--ink-2); }
+    tr.tramo td { border-top: 0; padding: 14px 6px 4px; font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
+    tr.t1 td.km { color: var(--ok); } tr.t2 td.km { color: var(--amber); } tr.t3 td.km { color: var(--alert); }
+    tr.meta td { font-weight: 800; font-size: 22px; }
+    .chip { display: inline-block; border-radius: 999px; padding: 2px 9px; font-size: 13px; font-weight: 800; margin: 0 4px 2px 0; white-space: nowrap; }
+    .gel { background: var(--warm); } .agua { background: #d6ecff; } .sal { background: var(--paper-2); }
+    .linea { display: grid; grid-template-columns: 64px 1fr; gap: 6px 10px; }
+    .linea .h { font-weight: 800; font-variant-numeric: tabular-nums; }
+    .cifra { font: 800 34px/1 var(--sans); font-stretch: 80%; }
+    .cifras { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; text-align: center; }
+    ul.check { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+    ul.check li::before { content: "☐ "; font-weight: 800; }
+    @media (max-width: 560px) { td, th { padding: 6px 3px; } td.km, td.ritmo { font-size: 17px; } td { font-size: 15px; }
+      .chip { font-size: 12px; padding: 1px 6px; } .card { padding: 16px 12px; } }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <a class="volver" href="index.html">← Kiosko</a>
+
+  <div class="hero">
+    <div>
+      <div class="eyebrow">Media Maratón Pilar de la Horadada · 21,097 km</div>
+      <h1 class="serif">Domingo 8 · 9:30</h1>
+    </div>
+    <span class="tipo tipo-larga cuenta" id="cuenta">Plan A · ~2:02</span>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="label">Las 4 reglas</div>
+      <ol class="reglas">
+        <li><b>Hasta el km 10 manda la FC, no el ritmo.</b> Por encima de 155 → aflojas.</li>
+        <li><b>Km 12: pasas tu tirada más larga.</b> Cabeza fría, no aceleres todavía.</li>
+        <li><b>Km 16, decides:</b> FC ≤ 161 y piernas bien → 5:40. Si no → 5:50 hasta meta.</li>
+        <li><b>Mira el paso por los carteles</b>, no el ritmo del reloj (mide de más: ve 3-4 s/km más rápido).</li>
+      </ol>
+    </div>
+    <div class="card">
+      <div class="label">En el bolsillo</div>
+      <div class="cifras">
+        <div><div class="cifra">5</div><div class="tenue">geles Evoenergy<br>(4 + 1 reserva)</div></div>
+        <div><div class="cifra">2-3</div><div class="tenue">cápsulas Evolytes<br>(de reserva)</div></div>
+        <div><div class="cifra">90 g</div><div class="tenue">hidratos en carrera<br>≈ 45 g/h</div></div>
+      </div>
+      <p class="tenue" style="margin-top:12px">Gel <b>siempre con agua</b>. Cápsulas solo si &gt; 20 °C, cercos de sal o primer aviso de calambre.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label">Km a km</div>
+    <table>
+      <thead><tr><th>Km</th><th>Ritmo</th><th class="fc">FC máx</th><th>Paso</th><th>Qué hacer</th></tr></thead>
+      <tbody>
+        <tr class="tramo t1"><td colspan="5">Arranque · 6:00</td></tr>
+        <tr class="t1"><td class="km">1</td><td class="ritmo">6:00</td><td class="fc">148</td><td class="paso">6:00</td><td>Salida tapón. Sin zigzag</td></tr>
+        <tr class="t1"><td class="km">2</td><td class="ritmo">6:00</td><td class="fc">148</td><td class="paso">12:00</td><td></td></tr>
+        <tr class="t1"><td class="km">3</td><td class="ritmo">6:00</td><td class="fc">150</td><td class="paso">18:00</td><td></td></tr>
+        <tr class="tramo t1"><td colspan="5">Crucero · 5:50</td></tr>
+        <tr class="t1"><td class="km">4</td><td class="ritmo">5:50</td><td class="fc">152</td><td class="paso">23:50</td><td>Asienta el ritmo</td></tr>
+        <tr class="t1"><td class="km">5</td><td class="ritmo">5:50</td><td class="fc">152</td><td class="paso">29:40</td><td><span class="chip agua">💧 150-200 ml</span></td></tr>
+        <tr class="t1"><td class="km">6</td><td class="ritmo">5:50</td><td class="fc">152</td><td class="paso">35:30</td><td><span class="chip gel">⚡ Gel 1</span><span class="chip agua">💧 agua</span></td></tr>
+        <tr class="t1"><td class="km">7</td><td class="ritmo">5:50</td><td class="fc">152</td><td class="paso">41:20</td><td></td></tr>
+        <tr class="t1"><td class="km">8</td><td class="ritmo">5:50</td><td class="fc">152</td><td class="paso">47:10</td><td><span class="chip sal">🧂 cápsula si calor</span></td></tr>
+        <tr class="t1"><td class="km">9</td><td class="ritmo">5:50</td><td class="fc">155</td><td class="paso">53:00</td><td></td></tr>
+        <tr class="t1"><td class="km">10</td><td class="ritmo">5:50</td><td class="fc">155</td><td class="paso">58:50</td><td><span class="chip agua">💧 150-200 ml</span> ¿Vas cómodo?</td></tr>
+        <tr class="tramo t2"><td colspan="5">Aguantar · 5:45</td></tr>
+        <tr class="t2"><td class="km">11</td><td class="ritmo">5:45</td><td class="fc">157</td><td class="paso">1:04:35</td><td><span class="chip gel">⚡ Gel 2</span><span class="chip agua">💧 agua</span></td></tr>
+        <tr class="t2"><td class="km">12</td><td class="ritmo">5:45</td><td class="fc">157</td><td class="paso">1:10:20</td><td>Ya más que nunca. Cabeza</td></tr>
+        <tr class="t2"><td class="km">13</td><td class="ritmo">5:45</td><td class="fc">157</td><td class="paso">1:16:05</td><td></td></tr>
+        <tr class="t2"><td class="km">14</td><td class="ritmo">5:45</td><td class="fc">157</td><td class="paso">1:21:50</td><td></td></tr>
+        <tr class="t2"><td class="km">15</td><td class="ritmo">5:45</td><td class="fc">158</td><td class="paso">1:27:35</td><td><span class="chip agua">💧 isotónico</span><span class="chip sal">🧂 cápsula si calor</span></td></tr>
+        <tr class="t2"><td class="km">16</td><td class="ritmo">5:45</td><td class="fc">158</td><td class="paso">1:33:20</td><td><span class="chip gel">⚡ Gel 3</span><span class="chip agua">💧 agua</span> <b>Decides</b></td></tr>
+        <tr class="tramo t3"><td colspan="5">Apretar · 5:40</td></tr>
+        <tr class="t3"><td class="km">17</td><td class="ritmo">5:40</td><td class="fc">161</td><td class="paso">1:39:00</td><td>Si no va, 5:45</td></tr>
+        <tr class="t3"><td class="km">18</td><td class="ritmo">5:40</td><td class="fc">161</td><td class="paso">1:44:40</td><td><span class="chip sal">🧂 3.ª si calambre</span></td></tr>
+        <tr class="t3"><td class="km">19</td><td class="ritmo">5:40</td><td class="fc">161</td><td class="paso">1:50:20</td><td></td></tr>
+        <tr class="t3"><td class="km">20</td><td class="ritmo">5:40</td><td class="fc">163</td><td class="paso">1:56:00</td><td><span class="chip agua">💧 último trago</span></td></tr>
+        <tr class="t3"><td class="km">21</td><td class="ritmo">5:35</td><td class="fc">libre</td><td class="paso">2:01:35</td><td>Todo lo que quede</td></tr>
+        <tr class="meta"><td class="km">🏁</td><td colspan="2">21,1</td><td class="paso">~2:02:10</td><td></td></tr>
+      </tbody>
+    </table>
+    <p class="tenue" style="margin-top:12px"><b>Plan B</b> (el 2:10 o día malo): 6:09 fijo · km 5 30:45 · km 10 1:01:30 · km 15 1:32:15 · km 20 2:03:00 · meta ~2:09:45.
+      Si a las 9:30 hace más de 20 °C: +5 s/km en todo.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="label">Domingo por la mañana</div>
+      <div class="linea">
+        <span class="h">6:30</span><span>Arriba</span>
+        <span class="h">6:45</span><span>Desayuno del plan: pan, serrano, membrillo, plátano, zumo, café</span>
+        <span class="h">7:00</span><span>400-500 ml de agua con una pizca de sal, a sorbos hasta las 8:30</span>
+        <span class="h">9:00</span><span>Último baño</span>
+        <span class="h">9:10</span><span>10' trote suave + 3 progresivos de 15"</span>
+        <span class="h">9:15</span><span><span class="chip gel">⚡ Gel 0</span> con un trago de agua</span>
+        <span class="h">9:30</span><span><b>Salida</b> · calle Mayor</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="label">Esta semana</div>
+      <div class="linea">
+        <span class="h">Mié</span><span>4×1000 R2: <b>prueba gel + cápsula</b> con la ropa de carrera. Pésate antes y después</span>
+        <span class="h">Jue-Vie</span><span>Descanso y dormir. Recoger dorsal</span>
+        <span class="h">Sáb</span><span>20' R1 a las 10:00 · carga de hidratos, poca fibra y grasa · cena 20:30</span>
+        <span class="h">Dom</span><span>Nada nuevo. Lo probado, nada más</span>
+      </div>
+      <div class="label" style="margin-top:16px">Bolsa</div>
+      <ul class="check">
+        <li>Dorsal e imperdibles · chip</li>
+        <li>5 geles · 3 cápsulas</li>
+        <li>Vaselina: pies, ingles, pezones</li>
+        <li>Reloj cargado · banda de FC</li>
+        <li>Ropa de después · agua · algo dulce</li>
+      </ul>
+    </div>
+  </div>
+</div>
+<script>
+  // cuenta atrás: hasta las 9:30 del 8/11 en hora de Madrid (+01:00 en noviembre)
+  var hoy = new Date(); hoy.setHours(0, 0, 0, 0);
+  var d = Math.round((new Date(2026, 10, 8) - hoy) / 864e5), el = document.getElementById('cuenta');
+  if (d >= 0) el.textContent = d === 0 ? 'Hoy' : d === 1 ? 'Mañana' : 'Faltan ' + d + ' días';
+</script>
+</body>
+</html>
